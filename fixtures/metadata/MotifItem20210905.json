@@ -1,0 +1,97 @@
+{
+    "description": "This schema describes version 20210905 of the Motif Item Metadata Standard",
+    "title": "MotifItem20210905",
+    "$id": "https://motif.foundation/schemas/MotifItemMetadata.json",
+    "type": "object",
+    "properties": {
+        "assetType": {
+            "description": "Motif Asset Type",
+            "examples": [
+                "item"
+            ],
+            "type": "string"
+        },
+        "itemType": {
+            "description": "Type of the NFT Item",
+            "examples": [
+                "Art"
+            ],
+            "type": "string"
+        },
+        "itemOwned": {
+            "description": "Owned NFT item",
+            "examples": [
+                "Digital Art"
+            ],
+            "type": "string"
+        },
+        "blockchain": {
+            "description": "Blockchain of the NFT item under the item type",
+            "examples": [
+                "Motif"
+            ],
+            "type": "string"
+        },
+        "name": {
+            "description": "Name of the NFT Item",
+            "examples": [
+                "Everydays — The First Five Thousand Days"
+            ],
+            "type": "string"
+        },
+        "creator": {
+            "description": "Creator of the NFT Item",
+            "examples": [
+                "Beeple"
+            ],
+            "type": "string"
+        },
+        "description": {
+            "description": "Description of the NFT Item",
+            "examples": [
+                "The work is a collage of 5000 digital images created by Winkelmann for his Everydays series."
+            ],
+            "type": "string"
+        }, 
+        "physicalOwnership": {
+            "description": "If applicable, certification that proves that asset is owned by the creator", 
+            "examples": [
+                "https://example.com/ownership.pdf"
+            ],
+            "type": "string"
+        }, 
+        "mimeType": {
+            "description": "MimeType of NFT Item",
+            "examples": [
+                "image/png"
+            ],
+            "type": "string"
+        },  
+        "artwork": {
+            "description": "Poster image(s) for audio, video media types and additional image(s) for certain nfts",
+            "examples": [
+                "https://ipfs.io/ipfs/QmQnDQbc8wDnVdtXbdrbY1ifwGw6QPAQGLwBvrV222vPhC"
+            ],
+            "type": "string"
+        },    
+        "version": {
+            "description": "Version of the schema ",
+            "examples": [
+                "motif-MotifItem20210905"
+            ],
+            "type": "string"
+        }
+    },
+    "additionalProperties": false,
+    "required": [
+        "assetType",
+        "itemType",
+        "itemOwned",
+        "blockchain",
+        "name",
+        "creator",
+        "description",
+        "mimeType",
+        "version"
+    ]
+}
