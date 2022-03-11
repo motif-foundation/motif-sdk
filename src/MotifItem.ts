@@ -4,7 +4,12 @@ import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { ContractTransaction } from '@ethersproject/contracts'
 import { Provider } from '@ethersproject/providers'
 import { Signer } from '@ethersproject/abstract-signer'
-import { ItemExchange, ItemExchangeFactory, Item, ItemFactory } from '@motif-foundation/asset/dist/typechain'
+import {
+  ItemExchange,
+  ItemExchangeFactory,
+  Item,
+  ItemFactory,
+} from '@motif-foundation/asset/dist/typechain'
 import { addresses } from './addresses'
 import {
   chainIdToNetworkName,
@@ -59,7 +64,10 @@ export class MotifItem {
     }
 
     this.item = ItemFactory.connect(this.itemAddress, signerOrProvider)
-    this.itemExchange = ItemExchangeFactory.connect(this.itemExchangeAddress, signerOrProvider)
+    this.itemExchange = ItemExchangeFactory.connect(
+      this.itemExchangeAddress,
+      signerOrProvider
+    )
   }
 
   /*********************
@@ -98,7 +106,6 @@ export class MotifItem {
   public async fetchContentURI(itemId: BigNumberish): Promise<string> {
     return this.item.tokenURI(itemId)
   }
-
   /**
    * Fetches the metadata uri for the specified item on an instance of the Motif Item Contract
    * @param itemId
@@ -585,12 +592,7 @@ export class MotifItem {
         this.fetchMetadataHash(itemId),
       ])
 
-      const itemData = constructItemData(
-        tokenURI,
-        metadataURI,
-        contentHash,
-        metadataHash
-      )
+      const itemData = constructItemData(tokenURI, metadataURI, contentHash, metadataHash)
       return isItemDataVerified(itemData, timeout)
     } catch (err) {
       return Promise.reject(err.message)

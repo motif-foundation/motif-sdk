@@ -76,7 +76,11 @@ export class MotifSpace {
   }
 
   public async fetchIsPublic(spaceId: BigNumberish): Promise<boolean> {
-    return this.space.isPublic(spaceId)
+    return this.space.tokenIsPublic(spaceId)
+  }
+
+  public async fetchPin(spaceId: BigNumberish): Promise<string> {
+    return this.space.tokenPin(spaceId)
   }
 
   public async fetchLands(spaceId: BigNumberish): Promise<Array<BigNumberish>> {
@@ -145,6 +149,21 @@ export class MotifSpace {
 
     return this.space.updateTokenMetadataURI(spaceId, metadataURI)
   }
+
+  /* public async updatePublicity(  //TODO LATER
+    spaceId: BigNumberish,
+    isPublic: boolean
+  ): Promise<ContractTransaction> {
+    try {
+      this.ensureNotReadOnly() 
+    } catch (err) {
+      return Promise.reject(err.message)
+    }
+
+    return this.space.updateTokenPublicity(spaceId, isPublic)
+  }
+  
+  function updateTokenLands( //TODO LATER*/
 
   public async mint(
     spaceData: SpaceData,
@@ -352,7 +371,7 @@ export class MotifSpace {
     timeout: number = 10
   ): Promise<boolean> {
     try {
-      const [tokenURI, metadataURI, contentHash, metadataHash, isPublic, lands] =
+      const [tokenURI, metadataURI, contentHash, metadataHash, isPublic, lands, pin] =
         await Promise.all([
           this.fetchContentURI(spaceId),
           this.fetchMetadataURI(spaceId),
@@ -360,6 +379,7 @@ export class MotifSpace {
           this.fetchMetadataHash(spaceId),
           this.fetchIsPublic(spaceId),
           this.fetchLands(spaceId),
+          this.fetchPin(spaceId),
         ])
 
       const spaceData = constructSpaceData(
@@ -368,7 +388,8 @@ export class MotifSpace {
         contentHash,
         metadataHash,
         isPublic,
-        lands
+        lands,
+        pin
       )
       return isSpaceDataVerified(spaceData, timeout)
     } catch (err) {

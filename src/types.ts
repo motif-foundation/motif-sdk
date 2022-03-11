@@ -44,31 +44,32 @@ export type ItemData = {
   metadataHash: BytesLike
 }
 
-
 export type AvatarData = {
-  tokenURI: string;
-  metadataURI: string;
-  contentHash: BytesLike;
-  metadataHash: BytesLike;
-};
+  tokenURI: string
+  metadataURI: string
+  contentHash: BytesLike
+  metadataHash: BytesLike
+  isDefault: boolean
+}
 
 export type SpaceData = {
-  tokenURI: string;
-  metadataURI: string;
-  contentHash: BytesLike;
-  metadataHash: BytesLike;
-  isPublic: boolean;
-  lands: Array<BigNumberish>;
-};
+  tokenURI: string
+  metadataURI: string
+  contentHash: BytesLike
+  metadataHash: BytesLike
+  isPublic: boolean
+  lands: Array<BigNumberish>
+  pin: string
+}
 
 export type LandData = {
-  tokenURI: string;
-  metadataURI: string;
-  contentHash: BytesLike;
-  metadataHash: BytesLike;
-  xCoordinate: number;
-  yCoordinate: number;
-};
+  tokenURI: string
+  metadataURI: string
+  contentHash: BytesLike
+  metadataHash: BytesLike
+  xCoordinate: number
+  yCoordinate: number
+}
 
 /**
  * EIP712 Signature

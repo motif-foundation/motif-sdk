@@ -4,7 +4,12 @@ import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
 import { ContractTransaction } from '@ethersproject/contracts'
 import { Provider } from '@ethersproject/providers'
 import { Signer } from '@ethersproject/abstract-signer'
-import { AvatarExchange, AvatarExchangeFactory, Avatar, AvatarFactory } from '@motif-foundation/asset/dist/typechain'
+import {
+  AvatarExchange,
+  AvatarExchangeFactory,
+  Avatar,
+  AvatarFactory,
+} from '@motif-foundation/asset/dist/typechain'
 import { addresses } from './addresses'
 import {
   chainIdToNetworkName,
@@ -25,11 +30,7 @@ export class MotifAvatar {
   public avatarExchange: AvatarExchange
   public readOnly: boolean
 
-  constructor(
-    signerOrProvider: Signer | Provider,
-    chainId: number 
-  ) {
-
+  constructor(signerOrProvider: Signer | Provider, chainId: number) {
     if (Signer.isSigner(signerOrProvider)) {
       this.readOnly = false
     } else {
@@ -38,14 +39,16 @@ export class MotifAvatar {
 
     this.signerOrProvider = signerOrProvider
     this.chainId = chainId
- 
-   const network = chainIdToNetworkName(chainId)
-   this.avatarAddress = addresses[network].avatar
-   this.avatarExchangeAddress = addresses[network].avatarExchange
- 
+
+    const network = chainIdToNetworkName(chainId)
+    this.avatarAddress = addresses[network].avatar
+    this.avatarExchangeAddress = addresses[network].avatarExchange
 
     this.avatar = AvatarFactory.connect(this.avatarAddress, signerOrProvider)
-    this.avatarExchange = AvatarExchangeFactory.connect(this.avatarExchangeAddress, signerOrProvider)
+    this.avatarExchange = AvatarExchangeFactory.connect(
+      this.avatarExchangeAddress,
+      signerOrProvider
+    )
   }
 
   /*********************
@@ -91,6 +94,14 @@ export class MotifAvatar {
    */
   public async fetchMetadataURI(avatarId: BigNumberish): Promise<string> {
     return this.avatar.tokenMetadataURI(avatarId)
+  }
+
+  /**
+   * Fetches the default for the specified avatar on an instance of the Motif Avatar Contract
+   * @param avatarId
+   */
+  public async fetchIsDefault(avatarId: BigNumberish): Promise<boolean> {
+    return this.avatar.tokenDefault(avatarId)
   }
 
   /**
@@ -194,6 +205,24 @@ export class MotifAvatar {
   }
 
   /**
+   * Updates the metadata uri for the specified avatar on an instance of the Motif Avatar Contract
+   * @param avatarId
+   * @param isDefault
+   */
+  public async updateIsDefault(
+    avatarId: BigNumberish,
+    isDefault: boolean
+  ): Promise<ContractTransaction> {
+    try {
+      this.ensureNotReadOnly()
+    } catch (err) {
+      return Promise.reject(err.message)
+    }
+
+    return this.avatar.updateTokenDefault(avatarId, isDefault)
+  }
+
+  /**
    * Mints a new piece of avatar on an instance of the Motif Avatar Contract
    * @param mintData
    * @param bidShares
@@ -213,7 +242,9 @@ export class MotifAvatar {
 
     const gasEstimate = await this.avatar.estimateGas.mint(avatarData, bidShares)
     const paddedEstimate = gasEstimate.mul(110).div(100)
-    return this.avatar.mint(avatarData, bidShares, { gasLimit: paddedEstimate.toString() })
+    return this.avatar.mint(avatarData, bidShares, {
+      gasLimit: paddedEstimate.toString(),
+    })
   }
 
   /**
@@ -564,18 +595,21 @@ export class MotifAvatar {
     timeout: number = 10
   ): Promise<boolean> {
     try {
-      const [tokenURI, metadataURI, contentHash, metadataHash] = await Promise.all([
-        this.fetchContentURI(avatarId),
-        this.fetchMetadataURI(avatarId),
-        this.fetchContentHash(avatarId),
-        this.fetchMetadataHash(avatarId),
-      ])
+      const [tokenURI, metadataURI, contentHash, metadataHash, isDefault] =
+        await Promise.all([
+          this.fetchContentURI(avatarId),
+          this.fetchMetadataURI(avatarId),
+          this.fetchContentHash(avatarId),
+          this.fetchMetadataHash(avatarId),
+          this.fetchIsDefault(avatarId),
+        ])
 
       const avatarData = constructAvatarData(
         tokenURI,
         metadataURI,
         contentHash,
-        metadataHash
+        metadataHash,
+        isDefault
       )
       return isAvatarDataVerified(avatarData, timeout)
     } catch (err) {

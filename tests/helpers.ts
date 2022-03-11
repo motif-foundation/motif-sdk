@@ -18,10 +18,20 @@ export async function setupMotif(
   wallet: Wallet,
   testWallets: Array<Wallet>
 ): Promise<MotifConfiguredAddresses> {
-  const itemExchange = await (await new ItemExchangeFactory(wallet).deploy()).deployed()
+  const itemExchange = await (
+    await new ItemExchangeFactory(wallet).deploy('8107')
+  ).deployed()
   const itemExchangeAddress = itemExchange.address
 
-  const item = await (await new ItemFactory(wallet).deploy(itemExchange.address, "Motif", "MOTIF", 1000000)).deployed()
+  const item = await (
+    await new ItemFactory(wallet).deploy(
+      itemExchange.address,
+      'Motif',
+      'MOTIF',
+      1000000,
+      '8107'
+    )
+  ).deployed()
   const itemAddress = item.address
 
   await itemExchange.configure(itemAddress)

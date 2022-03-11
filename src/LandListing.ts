@@ -3,28 +3,28 @@ import { Provider, TransactionReceipt } from '@ethersproject/providers'
 import {
   LandListing as LandListingContract,
   LandListing__factory,
-} from '@motif-foundation/listing/dist/typechain' 
+} from '@motif-foundation/listing/dist/typechain'
 import motifAddresses from '@motif-foundation/listing/dist/addresses/7018.json'
 import { addresses } from './addresses'
-import { chainIdToNetworkName,validateAndParseAddress } from './utils'
+import { chainIdToNetworkName, validateAndParseAddress } from './utils'
 
 const landListingAddresses: { [key: string]: string } = {
   motif: motifAddresses.landListing,
 }
 
 export interface LandList {
- approved: boolean;
-  amount: BigNumber;
-  startsAt: BigNumber;
-  duration: BigNumber;
-  firstBidTime: BigNumber;
-  listPrice: BigNumber;
-  listType: number;
-  intermediaryFeePercentage: number;
-  tokenOwner: string;
-  bidder: string;
-  intermediary: string;
-  listCurrency: string;
+  approved: boolean
+  amount: BigNumber
+  startsAt: BigNumber
+  duration: BigNumber
+  firstBidTime: BigNumber
+  listPrice: BigNumber
+  listType: number
+  intermediaryFeePercentage: number
+  tokenOwner: string
+  bidder: string
+  intermediary: string
+  listCurrency: string
 }
 
 export class LandListing {
@@ -32,22 +32,26 @@ export class LandListing {
   public readonly readOnly: boolean
   public readonly signerOrProvider: Signer | Provider
   public readonly landListing: LandListingContract
- public  landAddress: string;
+  public landAddress: string
 
-  constructor(signerOrProvider: Signer | Provider, chainId: number, landAddress?: string) {
-    this.chainId = chainId;
-    this.readOnly = !Signer.isSigner(signerOrProvider);
-    this.signerOrProvider = signerOrProvider;
-    const network = chainIdToNetworkName(chainId);
-    const address = landListingAddresses[network];
-    this.landListing = LandListing__factory.connect(address, signerOrProvider);
+  constructor(
+    signerOrProvider: Signer | Provider,
+    chainId: number,
+    landAddress?: string
+  ) {
+    this.chainId = chainId
+    this.readOnly = !Signer.isSigner(signerOrProvider)
+    this.signerOrProvider = signerOrProvider
+    const network = chainIdToNetworkName(chainId)
+    const address = landListingAddresses[network]
+    this.landListing = LandListing__factory.connect(address, signerOrProvider)
 
     if (landAddress) {
-      const parsedLandAddress = validateAndParseAddress(landAddress); 
-      this.landAddress = parsedLandAddress; 
+      const parsedLandAddress = validateAndParseAddress(landAddress)
+      this.landAddress = parsedLandAddress
     } else {
-      this.landAddress = addresses[network].land; 
-    } 
+      this.landAddress = addresses[network].land
+    }
   }
 
   public async fetchListing(listingId: BigNumberish): Promise<LandList> {
@@ -69,7 +73,7 @@ export class LandListing {
   }
 
   public async createListing(
- tokenId: BigNumberish,
+    tokenId: BigNumberish,
     startsAt: BigNumberish,
     duration: BigNumberish,
     listPrice: BigNumberish,
@@ -80,7 +84,7 @@ export class LandListing {
     tokenAddress: string = this.landAddress
   ) {
     return this.landListing.createListing(
-   tokenId,
+      tokenId,
       tokenAddress,
       startsAt,
       duration,
@@ -101,13 +105,10 @@ export class LandListing {
     approved: boolean,
     startsAt: BigNumberish
   ) {
-    return this.landListing.setListingDropApproval(listingId, approved, startsAt);
+    return this.landListing.setListingDropApproval(listingId, approved, startsAt)
   }
 
-  public async setListingListPrice(
-    listingId: BigNumberish,
-    listPrice: BigNumberish
-  ) {
+  public async setListingListPrice(listingId: BigNumberish, listPrice: BigNumberish) {
     return this.landListing.setListingListPrice(listingId, listPrice)
   }
 
@@ -121,12 +122,12 @@ export class LandListing {
     }
   }
 
-   public async createBidForFixed(listingId: BigNumberish, amount: BigNumberish) {
-    const { listCurrency } = await this.landListing.lists(listingId);
+  public async endFixedPriceListing(listingId: BigNumberish, amount: BigNumberish) {
+    const { listCurrency } = await this.landListing.listings(listingId)
     if (listCurrency === ethers.constants.AddressZero) {
-      return this.landListing.createBid(listingId, amount, { value: amount });
+      return this.landListing.endFixedPriceListing(listingId, amount, { value: amount })
     } else {
-      return this.landListing.createBid(listingId, amount);
+      return this.landListing.endFixedPriceListing(listingId, amount)
     }
   }
 

@@ -1,6 +1,6 @@
 {
   "name": "@motif-foundation/sdk", 
-  "version": "1.0.28",
+  "version": "1.0.46",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "files": [
@@ -22,12 +22,12 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@motif-foundation/listing": "^1.0.8",
-    "@motif-foundation/asset": "^1.0.9",
+    "@motif-foundation/listing": "^1.0.20",
+    "@motif-foundation/asset": "^1.0.17",
     "@motif-foundation/item-metadata": "^1.0.2",
-    "@motif-foundation/space-metadata": "^1.0.1",
-    "@motif-foundation/land-metadata": "^1.0.1",
-    "@motif-foundation/avatar-metadata": "^1.0.1",
+    "@motif-foundation/space-metadata": "^1.0.4",
+    "@motif-foundation/land-metadata": "^1.0.2",
+    "@motif-foundation/avatar-metadata": "^1.0.8",
     "axios": "^0.21.1",
     "eth-sig-util": "^3.0.0",
     "ethereumjs-util": "^7.0.7",

@@ -1,7 +1,7 @@
-import { getAddress } from "@ethersproject/address";
-import warning from "tiny-warning";
-import invariant from "tiny-invariant";
-import sjcl from "sjcl";
+import { getAddress } from '@ethersproject/address'
+import warning from 'tiny-warning'
+import invariant from 'tiny-invariant'
+import sjcl from 'sjcl'
 import {
   Ask,
   Bid,
@@ -12,23 +12,23 @@ import {
   ItemData,
   LandData,
   AvatarData,
-  SpaceData 
-} from "./types";
-import { Decimal } from "./Decimal";
+  SpaceData,
+} from './types'
+import { Decimal } from './Decimal'
 import {
   arrayify,
   BytesLike,
   hexDataLength,
   hexlify,
   isHexString,
-} from "@ethersproject/bytes";
+} from '@ethersproject/bytes'
 //import { recoverTypedSignature, signTypedData_v4 } from "eth-sig-util";
 //import { fromRpcSig, toRpcSig } from "ethereumjs-util";
-import { BaseErc20Factory } from "@motif-foundation/asset/dist/typechain";
-import axios from "axios";
-import { BigNumber, BigNumberish } from "@ethersproject/bignumber";
-import { ethers, Wallet } from "ethers";
-import { ContractTransaction } from "@ethersproject/contracts";
+import { BaseErc20Factory } from '@motif-foundation/asset/dist/typechain'
+import axios from 'axios'
+import { BigNumber, BigNumberish } from '@ethersproject/bignumber'
+import { ethers, Wallet } from 'ethers'
+import { ContractTransaction } from '@ethersproject/contracts'
 
 /********************
  * Type Constructors
@@ -42,17 +42,17 @@ export function constructItemData(
   metadataHash: BytesLike
 ): ItemData {
   // validate the hash to ensure it fits in bytes32
-  validateBytes32(contentHash);
-  validateBytes32(metadataHash);
-  validateURI(tokenURI);
-  validateURI(metadataURI);
+  validateBytes32(contentHash)
+  validateBytes32(metadataHash)
+  validateURI(tokenURI)
+  validateURI(metadataURI)
 
   return {
     tokenURI: tokenURI,
     metadataURI: metadataURI,
     contentHash: contentHash,
     metadataHash: metadataHash,
-  };
+  }
 }
 
 export function constructSpaceData(
@@ -61,13 +61,14 @@ export function constructSpaceData(
   contentHash: BytesLike,
   metadataHash: BytesLike,
   isPublic: boolean,
-  lands: Array<BigNumberish>
+  lands: Array<BigNumberish>,
+  pin: string
 ): SpaceData {
   // validate the hash to ensure it fits in bytes32
-  validateBytes32(contentHash);
-  validateBytes32(metadataHash);
-  validateURI(tokenURI);
-  validateURI(metadataURI);
+  validateBytes32(contentHash)
+  validateBytes32(metadataHash)
+  validateURI(tokenURI)
+  validateURI(metadataURI)
 
   return {
     tokenURI: tokenURI,
@@ -75,28 +76,31 @@ export function constructSpaceData(
     contentHash: contentHash,
     metadataHash: metadataHash,
     isPublic: isPublic,
-    lands: lands
-  };
+    lands: lands,
+    pin: pin,
+  }
 }
 
 export function constructAvatarData(
   tokenURI: string,
   metadataURI: string,
   contentHash: BytesLike,
-  metadataHash: BytesLike 
+  metadataHash: BytesLike,
+  isDefault: boolean
 ): AvatarData {
   // validate the hash to ensure it fits in bytes32
-  validateBytes32(contentHash);
-  validateBytes32(metadataHash);
-  validateURI(tokenURI);
-  validateURI(metadataURI);
+  validateBytes32(contentHash)
+  validateBytes32(metadataHash)
+  validateURI(tokenURI)
+  validateURI(metadataURI)
 
   return {
     tokenURI: tokenURI,
     metadataURI: metadataURI,
     contentHash: contentHash,
-    metadataHash: metadataHash 
-  };
+    metadataHash: metadataHash,
+    isDefault: isDefault,
+  }
 }
 
 export function constructLandData(
@@ -106,13 +110,12 @@ export function constructLandData(
   metadataHash: BytesLike,
   xCoordinate: number,
   yCoordinate: number
-
 ): LandData {
   // validate the hash to ensure it fits in bytes32
-  validateBytes32(contentHash);
-  validateBytes32(metadataHash);
-  validateURI(tokenURI);
-  validateURI(metadataURI);
+  validateBytes32(contentHash)
+  validateBytes32(metadataHash)
+  validateURI(tokenURI)
+  validateURI(metadataURI)
 
   return {
     tokenURI: tokenURI,
@@ -120,8 +123,8 @@ export function constructLandData(
     contentHash: contentHash,
     metadataHash: metadataHash,
     xCoordinate: xCoordinate,
-    yCoordinate: yCoordinate
-  };
+    yCoordinate: yCoordinate,
+  }
 }
 
 export function constructBidShares(
@@ -129,17 +132,17 @@ export function constructBidShares(
   owner: number,
   prevOwner: number
 ): BidShares {
-  const decimalCreator = Decimal.new(parseFloat(creator.toFixed(4)));
-  const decimalOwner = Decimal.new(parseFloat(owner.toFixed(4)));
-  const decimalPrevOwner = Decimal.new(parseFloat(prevOwner.toFixed(4)));
+  const decimalCreator = Decimal.new(parseFloat(creator.toFixed(4)))
+  const decimalOwner = Decimal.new(parseFloat(owner.toFixed(4)))
+  const decimalPrevOwner = Decimal.new(parseFloat(prevOwner.toFixed(4)))
 
-  validateBidShares(decimalCreator, decimalOwner, decimalPrevOwner);
+  validateBidShares(decimalCreator, decimalOwner, decimalPrevOwner)
 
   return {
     creator: decimalCreator,
     owner: decimalOwner,
     prevOwner: decimalPrevOwner,
-  };
+  }
 }
 
 export function validateBidShares(
@@ -147,24 +150,24 @@ export function validateBidShares(
   owner: DecimalValue,
   prevOwner: DecimalValue
 ): void {
-  const decimal100 = Decimal.new(100);
+  const decimal100 = Decimal.new(100)
 
-  const sum = creator.value.add(owner.value).add(prevOwner.value);
+  const sum = creator.value.add(owner.value).add(prevOwner.value)
 
   if (sum.toString() != decimal100.value.toString()) {
     invariant(
       false,
       `The BidShares sum to ${sum.toString()}, but they must sum to ${decimal100.value.toString()}`
-    );
+    )
   }
 }
 
 export function constructAsk(currency: string, amount: BigNumberish): Ask {
-  const parsedCurrency = validateAndParseAddress(currency);
+  const parsedCurrency = validateAndParseAddress(currency)
   return {
     currency: parsedCurrency,
     amount: amount,
-  };
+  }
 }
 
 export function constructBid(
@@ -174,29 +177,29 @@ export function constructBid(
   recipient: string,
   sellOnShare: number
 ): Bid {
-  let parsedCurrency: string;
-  let parsedBidder: string;
-  let parsedRecipient: string;
+  let parsedCurrency: string
+  let parsedBidder: string
+  let parsedRecipient: string
 
   try {
-    parsedCurrency = validateAndParseAddress(currency);
+    parsedCurrency = validateAndParseAddress(currency)
   } catch (err) {
-    throw new Error(`Currency address is invalid: ${err.message}`);
+    throw new Error(`Currency address is invalid: ${err.message}`)
   }
 
   try {
-    parsedBidder = validateAndParseAddress(bidder);
+    parsedBidder = validateAndParseAddress(bidder)
   } catch (err) {
-    throw new Error(`Bidder address is invalid: ${err.message}`);
+    throw new Error(`Bidder address is invalid: ${err.message}`)
   }
 
   try {
-    parsedRecipient = validateAndParseAddress(recipient);
+    parsedRecipient = validateAndParseAddress(recipient)
   } catch (err) {
-    throw new Error(`Recipient address is invalid: ${err.message}`);
+    throw new Error(`Recipient address is invalid: ${err.message}`)
   }
 
-  const decimalSellOnShare = Decimal.new(parseFloat(sellOnShare.toFixed(4)));
+  const decimalSellOnShare = Decimal.new(parseFloat(sellOnShare.toFixed(4)))
 
   return {
     currency: parsedCurrency,
@@ -204,55 +207,55 @@ export function constructBid(
     bidder: parsedBidder,
     recipient: parsedRecipient,
     sellOnShare: decimalSellOnShare,
-  };
+  }
 }
 
 export function validateBytes32(value: BytesLike) {
-  if (typeof value == "string") {
+  if (typeof value == 'string') {
     if (isHexString(value) && hexDataLength(value) == 32) {
-      return;
+      return
     }
 
-    invariant(false, `${value} is not a 0x prefixed 32 bytes hex string`);
+    invariant(false, `${value} is not a 0x prefixed 32 bytes hex string`)
   } else {
     if (hexDataLength(hexlify(value)) == 32) {
-      return;
+      return
     }
 
-    invariant(false, `value is not a length 32 byte array`);
+    invariant(false, `value is not a length 32 byte array`)
   }
 }
 
 export function validateURI(uri: string) {
   if (!uri.match(/^https:\/\/(.*)/)) {
-    invariant(false, `${uri} must begin with \`https://\``);
+    invariant(false, `${uri} must begin with \`https://\``)
   }
 }
 
 export function validateAndParseAddress(address: string): string {
   try {
-    const checksummedAddress = getAddress(address);
-    warning(address === checksummedAddress, `${address} is not checksummed.`);
-    return checksummedAddress;
+    const checksummedAddress = getAddress(address)
+    warning(address === checksummedAddress, `${address} is not checksummed.`)
+    return checksummedAddress
   } catch (error) {
-    invariant(false, `${address} is not a valid address.`);
+    invariant(false, `${address} is not a valid address.`)
   }
 }
 
 export function chainIdToNetworkName(chainId: number): string {
   switch (chainId) {
     case 7018: {
-      return "motif";
+      return 'motif'
     }
     case 3: {
-      return "ropsten";
+      return 'ropsten'
     }
     case 1: {
-      return "mainnet";
+      return 'mainnet'
     }
   }
 
-  invariant(false, `chainId ${chainId} not officially supported by the Motif`);
+  invariant(false, `chainId ${chainId} not officially supported by the Motif`)
 }
 
 /********************
@@ -261,23 +264,23 @@ export function chainIdToNetworkName(chainId: number): string {
  */
 
 export function sha256FromBuffer(buffer: Buffer): string {
-  const bitArray = sjcl.codec.hex.toBits(buffer.toString("hex"));
-  const hashArray = sjcl.hash.sha256.hash(bitArray);
-  return "0x".concat(sjcl.codec.hex.fromBits(hashArray));
+  const bitArray = sjcl.codec.hex.toBits(buffer.toString('hex'))
+  const hashArray = sjcl.hash.sha256.hash(bitArray)
+  return '0x'.concat(sjcl.codec.hex.fromBits(hashArray))
 }
 
 export function sha256FromHexString(data: string): string {
   if (!isHexString(data)) {
-    throw new Error(`${data} is not valid 0x prefixed hex`);
+    throw new Error(`${data} is not valid 0x prefixed hex`)
   }
 
-  const bitArray = sjcl.codec.hex.toBits(data);
-  const hashArray = sjcl.hash.sha256.hash(bitArray);
-  return "0x".concat(sjcl.codec.hex.fromBits(hashArray));
+  const bitArray = sjcl.codec.hex.toBits(data)
+  const hashArray = sjcl.hash.sha256.hash(bitArray)
+  return '0x'.concat(sjcl.codec.hex.fromBits(hashArray))
 }
 
 export function stripHexPrefix(hex: string) {
-  return hex.slice(0, 2) == "0x" ? hex.slice(2) : hex;
+  return hex.slice(0, 2) == '0x' ? hex.slice(2) : hex
 }
 
 /*********************
@@ -501,8 +504,8 @@ export async function approveERC20(
   spender: string,
   amount: BigNumberish
 ): Promise<ContractTransaction> {
-  const erc20 = BaseErc20Factory.connect(erc20Address, wallet);
-  return erc20.approve(spender, amount);
+  const erc20 = BaseErc20Factory.connect(erc20Address, wallet)
+  return erc20.approve(spender, amount)
 }
 
 export async function isURIHashVerified(
@@ -511,18 +514,18 @@ export async function isURIHashVerified(
   timeout: number = 10
 ): Promise<boolean> {
   try {
-    validateURI(uri);
+    validateURI(uri)
 
     const resp = await axios.get(uri, {
       timeout: timeout,
-      responseType: "arraybuffer",
-    });
-    const uriHash = sha256FromBuffer(resp.data);
-    const normalizedExpectedHash = hexlify(expectedHash);
+      responseType: 'arraybuffer',
+    })
+    const uriHash = sha256FromBuffer(resp.data)
+    const normalizedExpectedHash = hexlify(expectedHash)
 
-    return uriHash == normalizedExpectedHash;
+    return uriHash == normalizedExpectedHash
   } catch (err) {
-    return Promise.reject(err.message);
+    return Promise.reject(err.message)
   }
 }
 
@@ -534,15 +537,15 @@ export async function isItemDataVerified(
     itemData.tokenURI,
     itemData.contentHash,
     timeout
-  );
+  )
 
   const isMetadataURIVerified = await isURIHashVerified(
     itemData.metadataURI,
     itemData.metadataHash,
     timeout
-  );
+  )
 
-  return isTokenURIVerified && isMetadataURIVerified;
+  return isTokenURIVerified && isMetadataURIVerified
 }
 
 export async function isAvatarDataVerified(
@@ -553,15 +556,15 @@ export async function isAvatarDataVerified(
     avatarData.tokenURI,
     avatarData.contentHash,
     timeout
-  );
+  )
 
   const isMetadataURIVerified = await isURIHashVerified(
     avatarData.metadataURI,
     avatarData.metadataHash,
     timeout
-  );
+  )
 
-  return isTokenURIVerified && isMetadataURIVerified;
+  return isTokenURIVerified && isMetadataURIVerified
 }
 
 export async function isSpaceDataVerified(
@@ -572,15 +575,15 @@ export async function isSpaceDataVerified(
     spaceData.tokenURI,
     spaceData.contentHash,
     timeout
-  );
+  )
 
   const isMetadataURIVerified = await isURIHashVerified(
     spaceData.metadataURI,
     spaceData.metadataHash,
     timeout
-  );
+  )
 
-  return isTokenURIVerified && isMetadataURIVerified;
+  return isTokenURIVerified && isMetadataURIVerified
 }
 
 export async function isLandDataVerified(
@@ -591,15 +594,15 @@ export async function isLandDataVerified(
     landData.tokenURI,
     landData.contentHash,
     timeout
-  );
+  )
 
   const isMetadataURIVerified = await isURIHashVerified(
     landData.metadataURI,
     landData.metadataHash,
     timeout
-  );
+  )
 
-  return isTokenURIVerified && isMetadataURIVerified;
+  return isTokenURIVerified && isMetadataURIVerified
 }
 
 export async function wrapETH(
@@ -607,9 +610,9 @@ export async function wrapETH(
   wethAddress: string,
   amount: BigNumber
 ): Promise<ContractTransaction> {
-  const abi = ["function deposit() public payable"];
-  const weth = new ethers.Contract(wethAddress, abi, wallet);
-  return weth.deposit({ value: amount });
+  const abi = ['function deposit() public payable']
+  const weth = new ethers.Contract(wethAddress, abi, wallet)
+  return weth.deposit({ value: amount })
 }
 
 export async function unwrapWETH(
@@ -617,7 +620,7 @@ export async function unwrapWETH(
   wethAddress: string,
   amount: BigNumber
 ): Promise<ContractTransaction> {
-  const abi = ["function withdraw(uint256) public"];
-  const weth = new ethers.Contract(wethAddress, abi, wallet);
-  return weth.withdraw(amount);
+  const abi = ['function withdraw(uint256) public']
+  const weth = new ethers.Contract(wethAddress, abi, wallet)
+  return weth.withdraw(amount)
 }

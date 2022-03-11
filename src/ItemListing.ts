@@ -1,30 +1,37 @@
+'use strict'
 import { BigNumber, BigNumberish, ethers, Signer } from 'ethers'
 import { Provider, TransactionReceipt } from '@ethersproject/providers'
 import {
   ItemListing as ItemListingContract,
   ItemListing__factory,
-} from '@motif-foundation/listing/dist/typechain' 
+} from '@motif-foundation/listing/dist/typechain'
 import motifAddresses from '@motif-foundation/listing/dist/addresses/7018.json'
 import { addresses } from './addresses'
-import { chainIdToNetworkName,validateAndParseAddress } from './utils'
+import { chainIdToNetworkName, validateAndParseAddress } from './utils'
 
 const itemListingAddresses: { [key: string]: string } = {
   motif: motifAddresses.itemListing,
 }
 
+function sumOfArrVal(arr: any) {
+  let sum = 0
+  arr.map((val) => (sum += val))
+  return sum
+}
+
 export interface ItemList {
- approved: boolean;
-  amount: BigNumber;
-  startsAt: BigNumber;
-  duration: BigNumber;
-  firstBidTime: BigNumber;
-  listPrice: BigNumber;
-  listType: number;
-  intermediaryFeePercentage: number;
-  tokenOwner: string;
-  bidder: string;
-  intermediary: string;
-  listCurrency: string;
+  approved: boolean
+  amount: BigNumber
+  startsAt: BigNumber
+  duration: BigNumber
+  firstBidTime: BigNumber
+  listPrice: BigNumber
+  listType: number
+  intermediaryFeePercentage: number
+  tokenOwner: string
+  bidder: string
+  intermediary: string
+  listCurrency: string
 }
 
 export class ItemListing {
@@ -32,22 +39,26 @@ export class ItemListing {
   public readonly readOnly: boolean
   public readonly signerOrProvider: Signer | Provider
   public readonly itemListing: ItemListingContract
- public  itemAddress: string;
+  public itemAddress: string
 
-  constructor(signerOrProvider: Signer | Provider, chainId: number, itemAddress?: string) {
-    this.chainId = chainId;
-    this.readOnly = !Signer.isSigner(signerOrProvider);
-    this.signerOrProvider = signerOrProvider;
-    const network = chainIdToNetworkName(chainId);
-    const address = itemListingAddresses[network];
-    this.itemListing = ItemListing__factory.connect(address, signerOrProvider);
+  constructor(
+    signerOrProvider: Signer | Provider,
+    chainId: number,
+    itemAddress?: string
+  ) {
+    this.chainId = chainId
+    this.readOnly = !Signer.isSigner(signerOrProvider)
+    this.signerOrProvider = signerOrProvider
+    const network = chainIdToNetworkName(chainId)
+    const address = itemListingAddresses[network]
+    this.itemListing = ItemListing__factory.connect(address, signerOrProvider)
 
     if (itemAddress) {
-      const parsedItemAddress = validateAndParseAddress(itemAddress); 
-      this.itemAddress = parsedItemAddress; 
+      const parsedItemAddress = validateAndParseAddress(itemAddress)
+      this.itemAddress = parsedItemAddress
     } else {
-      this.itemAddress = addresses[network].item; 
-    } 
+      this.itemAddress = addresses[network].item
+    }
   }
 
   public async fetchListing(listingId: BigNumberish): Promise<ItemList> {
@@ -69,7 +80,7 @@ export class ItemListing {
   }
 
   public async createListing(
- tokenId: BigNumberish,
+    tokenId: BigNumberish,
     startsAt: BigNumberish,
     duration: BigNumberish,
     listPrice: BigNumberish,
@@ -80,7 +91,7 @@ export class ItemListing {
     tokenAddress: string = this.itemAddress
   ) {
     return this.itemListing.createListing(
-   tokenId,
+      tokenId,
       tokenAddress,
       startsAt,
       duration,
@@ -101,13 +112,10 @@ export class ItemListing {
     approved: boolean,
     startsAt: BigNumberish
   ) {
-    return this.itemListing.setListingDropApproval(listingId, approved, startsAt);
+    return this.itemListing.setListingDropApproval(listingId, approved, startsAt)
   }
 
-  public async setListingListPrice(
-    listingId: BigNumberish,
-    listPrice: BigNumberish
-  ) {
+  public async setListingListPrice(listingId: BigNumberish, listPrice: BigNumberish) {
     return this.itemListing.setListingListPrice(listingId, listPrice)
   }
 
@@ -121,12 +129,27 @@ export class ItemListing {
     }
   }
 
-   public async createBidForFixed(listingId: BigNumberish, amount: BigNumberish) {
-    const { listCurrency } = await this.itemListing.lists(listingId);
+  public async endFixedPriceListing(listingId: BigNumberish, amount: BigNumberish) {
+    const { listCurrency } = await this.itemListing.listings(listingId)
     if (listCurrency === ethers.constants.AddressZero) {
-      return this.itemListing.createBid(listingId, amount, { value: amount });
+      return this.itemListing.endFixedPriceListing(listingId, amount, { value: amount })
     } else {
-      return this.itemListing.createBid(listingId, amount);
+      return this.itemListing.endFixedPriceListing(listingId, amount)
+    }
+  }
+
+  public async endFixedPriceListings(
+    listingIds: Array<BigNumberish>,
+    amounts: Array<BigNumberish>
+  ) {
+    const { listCurrency } = await this.itemListing.listings(listingIds[0])
+    let totalAmount = sumOfArrVal(amounts)
+    if (listCurrency === ethers.constants.AddressZero) {
+      return this.itemListing.endFixedPriceListings(listingIds, amounts, {
+        value: totalAmount,
+      })
+    } else {
+      return this.itemListing.endFixedPriceListings(listingIds, amounts)
     }
   }
 

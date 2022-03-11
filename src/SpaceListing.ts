@@ -3,28 +3,28 @@ import { Provider, TransactionReceipt } from '@ethersproject/providers'
 import {
   SpaceListing as SpaceListingContract,
   SpaceListing__factory,
-} from '@motif-foundation/listing/dist/typechain' 
+} from '@motif-foundation/listing/dist/typechain'
 import motifAddresses from '@motif-foundation/listing/dist/addresses/7018.json'
 import { addresses } from './addresses'
-import { chainIdToNetworkName,validateAndParseAddress } from './utils'
+import { chainIdToNetworkName, validateAndParseAddress } from './utils'
 
 const spaceListingAddresses: { [key: string]: string } = {
   motif: motifAddresses.spaceListing,
 }
 
 export interface SpaceList {
- approved: boolean;
-  amount: BigNumber;
-  startsAt: BigNumber;
-  duration: BigNumber;
-  firstBidTime: BigNumber;
-  listPrice: BigNumber;
-  listType: number;
-  intermediaryFeePercentage: number;
-  tokenOwner: string;
-  bidder: string;
-  intermediary: string;
-  listCurrency: string;
+  approved: boolean
+  amount: BigNumber
+  startsAt: BigNumber
+  duration: BigNumber
+  firstBidTime: BigNumber
+  listPrice: BigNumber
+  listType: number
+  intermediaryFeePercentage: number
+  tokenOwner: string
+  bidder: string
+  intermediary: string
+  listCurrency: string
 }
 
 export class SpaceListing {
@@ -32,22 +32,26 @@ export class SpaceListing {
   public readonly readOnly: boolean
   public readonly signerOrProvider: Signer | Provider
   public readonly spaceListing: SpaceListingContract
- public  spaceAddress: string;
+  public spaceAddress: string
 
-  constructor(signerOrProvider: Signer | Provider, chainId: number, spaceAddress?: string) {
-    this.chainId = chainId;
-    this.readOnly = !Signer.isSigner(signerOrProvider);
-    this.signerOrProvider = signerOrProvider;
-    const network = chainIdToNetworkName(chainId);
-    const address = spaceListingAddresses[network];
-    this.spaceListing = SpaceListing__factory.connect(address, signerOrProvider);
+  constructor(
+    signerOrProvider: Signer | Provider,
+    chainId: number,
+    spaceAddress?: string
+  ) {
+    this.chainId = chainId
+    this.readOnly = !Signer.isSigner(signerOrProvider)
+    this.signerOrProvider = signerOrProvider
+    const network = chainIdToNetworkName(chainId)
+    const address = spaceListingAddresses[network]
+    this.spaceListing = SpaceListing__factory.connect(address, signerOrProvider)
 
     if (spaceAddress) {
-      const parsedSpaceAddress = validateAndParseAddress(spaceAddress); 
-      this.spaceAddress = parsedSpaceAddress; 
+      const parsedSpaceAddress = validateAndParseAddress(spaceAddress)
+      this.spaceAddress = parsedSpaceAddress
     } else {
-      this.spaceAddress = addresses[network].space; 
-    } 
+      this.spaceAddress = addresses[network].space
+    }
   }
 
   public async fetchListing(listingId: BigNumberish): Promise<SpaceList> {
@@ -69,7 +73,7 @@ export class SpaceListing {
   }
 
   public async createListing(
- tokenId: BigNumberish,
+    tokenId: BigNumberish,
     startsAt: BigNumberish,
     duration: BigNumberish,
     listPrice: BigNumberish,
@@ -80,7 +84,7 @@ export class SpaceListing {
     tokenAddress: string = this.spaceAddress
   ) {
     return this.spaceListing.createListing(
-   tokenId,
+      tokenId,
       tokenAddress,
       startsAt,
       duration,
@@ -101,13 +105,10 @@ export class SpaceListing {
     approved: boolean,
     startsAt: BigNumberish
   ) {
-    return this.spaceListing.setListingDropApproval(listingId, approved, startsAt);
+    return this.spaceListing.setListingDropApproval(listingId, approved, startsAt)
   }
 
-  public async setListingListPrice(
-    listingId: BigNumberish,
-    listPrice: BigNumberish
-  ) {
+  public async setListingListPrice(listingId: BigNumberish, listPrice: BigNumberish) {
     return this.spaceListing.setListingListPrice(listingId, listPrice)
   }
 
@@ -121,12 +122,12 @@ export class SpaceListing {
     }
   }
 
-   public async createBidForFixed(listingId: BigNumberish, amount: BigNumberish) {
-    const { listCurrency } = await this.spaceListing.lists(listingId);
+  public async endFixedPriceListing(listingId: BigNumberish, amount: BigNumberish) {
+    const { listCurrency } = await this.spaceListing.listings(listingId)
     if (listCurrency === ethers.constants.AddressZero) {
-      return this.spaceListing.createBid(listingId, amount, { value: amount });
+      return this.spaceListing.endFixedPriceListing(listingId, amount, { value: amount })
     } else {
-      return this.spaceListing.createBid(listingId, amount);
+      return this.spaceListing.endFixedPriceListing(listingId, amount)
     }
   }
 

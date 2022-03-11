@@ -3,28 +3,28 @@ import { Provider, TransactionReceipt } from '@ethersproject/providers'
 import {
   AvatarListing as AvatarListingContract,
   AvatarListing__factory,
-} from '@motif-foundation/listing/dist/typechain' 
+} from '@motif-foundation/listing/dist/typechain'
 import motifAddresses from '@motif-foundation/listing/dist/addresses/7018.json'
 import { addresses } from './addresses'
-import { chainIdToNetworkName,validateAndParseAddress } from './utils'
+import { chainIdToNetworkName, validateAndParseAddress } from './utils'
 
 const avatarListingAddresses: { [key: string]: string } = {
   motif: motifAddresses.avatarListing,
 }
 
 export interface AvatarList {
- approved: boolean;
-  amount: BigNumber;
-  startsAt: BigNumber;
-  duration: BigNumber;
-  firstBidTime: BigNumber;
-  listPrice: BigNumber;
-  listType: number;
-  intermediaryFeePercentage: number;
-  tokenOwner: string;
-  bidder: string;
-  intermediary: string;
-  listCurrency: string;
+  approved: boolean
+  amount: BigNumber
+  startsAt: BigNumber
+  duration: BigNumber
+  firstBidTime: BigNumber
+  listPrice: BigNumber
+  listType: number
+  intermediaryFeePercentage: number
+  tokenOwner: string
+  bidder: string
+  intermediary: string
+  listCurrency: string
 }
 
 export class AvatarListing {
@@ -32,22 +32,26 @@ export class AvatarListing {
   public readonly readOnly: boolean
   public readonly signerOrProvider: Signer | Provider
   public readonly avatarListing: AvatarListingContract
- public  avatarAddress: string;
+  public avatarAddress: string
 
-  constructor(signerOrProvider: Signer | Provider, chainId: number, avatarAddress?: string) {
-    this.chainId = chainId;
-    this.readOnly = !Signer.isSigner(signerOrProvider);
-    this.signerOrProvider = signerOrProvider;
-    const network = chainIdToNetworkName(chainId);
-    const address = avatarListingAddresses[network];
-    this.avatarListing = AvatarListing__factory.connect(address, signerOrProvider);
+  constructor(
+    signerOrProvider: Signer | Provider,
+    chainId: number,
+    avatarAddress?: string
+  ) {
+    this.chainId = chainId
+    this.readOnly = !Signer.isSigner(signerOrProvider)
+    this.signerOrProvider = signerOrProvider
+    const network = chainIdToNetworkName(chainId)
+    const address = avatarListingAddresses[network]
+    this.avatarListing = AvatarListing__factory.connect(address, signerOrProvider)
 
     if (avatarAddress) {
-      const parsedAvatarAddress = validateAndParseAddress(avatarAddress); 
-      this.avatarAddress = parsedAvatarAddress; 
+      const parsedAvatarAddress = validateAndParseAddress(avatarAddress)
+      this.avatarAddress = parsedAvatarAddress
     } else {
-      this.avatarAddress = addresses[network].avatar; 
-    } 
+      this.avatarAddress = addresses[network].avatar
+    }
   }
 
   public async fetchListing(listingId: BigNumberish): Promise<AvatarList> {
@@ -69,7 +73,7 @@ export class AvatarListing {
   }
 
   public async createListing(
- 	 tokenId: BigNumberish,
+    tokenId: BigNumberish,
     startsAt: BigNumberish,
     duration: BigNumberish,
     listPrice: BigNumberish,
@@ -80,7 +84,7 @@ export class AvatarListing {
     tokenAddress: string = this.avatarAddress
   ) {
     return this.avatarListing.createListing(
-   tokenId,
+      tokenId,
       tokenAddress,
       startsAt,
       duration,
@@ -101,13 +105,10 @@ export class AvatarListing {
     approved: boolean,
     startsAt: BigNumberish
   ) {
-    return this.avatarListing.setListingDropApproval(listingId, approved, startsAt);
+    return this.avatarListing.setListingDropApproval(listingId, approved, startsAt)
   }
 
-  public async setListingListPrice(
-    listingId: BigNumberish,
-    listPrice: BigNumberish
-  ) {
+  public async setListingListPrice(listingId: BigNumberish, listPrice: BigNumberish) {
     return this.avatarListing.setListingListPrice(listingId, listPrice)
   }
 
@@ -121,12 +122,12 @@ export class AvatarListing {
     }
   }
 
-   public async createBidForFixed(listingId: BigNumberish, amount: BigNumberish) {
-    const { listCurrency } = await this.avatarListing.lists(listingId);
+  public async endFixedPriceListing(listingId: BigNumberish, amount: BigNumberish) {
+    const { listCurrency } = await this.avatarListing.listings(listingId)
     if (listCurrency === ethers.constants.AddressZero) {
-      return this.avatarListing.createBid(listingId, amount, { value: amount });
+      return this.avatarListing.endFixedPriceListing(listingId, amount, { value: amount })
     } else {
-      return this.avatarListing.createBid(listingId, amount);
+      return this.avatarListing.endFixedPriceListing(listingId, amount)
     }
   }
 
