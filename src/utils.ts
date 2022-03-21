@@ -247,6 +247,9 @@ export function chainIdToNetworkName(chainId: number): string {
     case 7018: {
       return 'motif'
     }
+    case 7019: {
+      return 'motifTestnet'
+    }
     case 3: {
       return 'ropsten'
     }

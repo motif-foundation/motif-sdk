@@ -5,12 +5,18 @@ import {
   ItemListing as ItemListingContract,
   ItemListing__factory,
 } from '@motif-foundation/listing/dist/typechain'
+import mainnetAddresses from '@motif-foundation/listing/dist/addresses/1.json'
+import ropstenAddresses from '@motif-foundation/listing/dist/addresses/3.json'
 import motifAddresses from '@motif-foundation/listing/dist/addresses/7018.json'
+import motifTestnetAddresses from '@motif-foundation/listing/dist/addresses/7019.json'
 import { addresses } from './addresses'
 import { chainIdToNetworkName, validateAndParseAddress } from './utils'
 
 const itemListingAddresses: { [key: string]: string } = {
+  mainnet: mainnetAddresses.itemListing,
+  ropsten: ropstenAddresses.itemListing,
   motif: motifAddresses.itemListing,
+  motifTestnet: motifTestnetAddresses.itemListing,
 }
 
 function sumOfArrVal(arr: any) {

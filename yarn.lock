@@ -845,17 +845,17 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@motif-foundation/asset@^1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/asset/-/asset-1.0.17.tgz#98def3beb41b889a9488bffbc0e9813d1ec3287a"
-  integrity sha512-5tnPxLcSAgSg+AspoQNHtxD8TLZEpveWAoA7jbbPDLk/aQOkuR+558MVP0nog5vdp4BZ/y4cmiF+Wlg4lV4H2g==
+"@motif-foundation/asset@^1.0.20":
+  version "1.0.20"
+  resolved "https://registry.yarnpkg.com/@motif-foundation/asset/-/asset-1.0.20.tgz#0cae53dbf6af8afba0fc6e1b0848832a54ff0081"
+  integrity sha512-DkASjnBBQZrmQjYEzYUE+hTeQpEfOoCXeiaSCvbYV+Ms8GHcJ7OorqpHtZmfQa7R3ZHqrzIRCul4u5lDCEaevA==
   dependencies:
     ethers "^5.0.19"
     truffle-flattener "^1.5.0"
 
 "@motif-foundation/avatar-metadata@^1.0.8":
   version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/avatar-metadata/-/avatar-metadata-1.0.8.tgz#e4938bf6b69e2830c1348820607d055ed212696c"
+  resolved "https://registry.npmjs.org/@motif-foundation/avatar-metadata/-/avatar-metadata-1.0.8.tgz"
   integrity sha512-bcDzS9ipR6ZmdBXoxbCsP56dHgzJQKG1gmwXGeMYBqddX9SrZ+aaX9c7LsNdVAD7ujD4p7bAQ2h7P7PxIuv+9w==
   dependencies:
     "@types/jsonschema" "^1.1.1"
@@ -877,7 +877,7 @@
 
 "@motif-foundation/land-metadata@^1.0.2":
   version "1.0.2"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/land-metadata/-/land-metadata-1.0.2.tgz#bfbc2622aeca89ff1c5580fc31279661fa1c195c"
+  resolved "https://registry.npmjs.org/@motif-foundation/land-metadata/-/land-metadata-1.0.2.tgz"
   integrity sha512-WueqWwD8Bl0xOSv9JML0srY99igQ94kBjYFGjDJA0y6ajfnbu90pj0UCXlU+UzDYN8rvqqg4h7MYic41WwOyOA==
   dependencies:
     "@types/jsonschema" "^1.1.1"
@@ -886,12 +886,12 @@
     tslib "^2.0.3"
     typescript "^4.1.3"
 
-"@motif-foundation/listing@^1.0.20":
-  version "1.0.20"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/listing/-/listing-1.0.20.tgz#d217d9a7b60e884b350f11d933028e9a9d11cfab"
-  integrity sha512-FQ2JePLwWD+myHBfyiZDozxcrJmX4mcmySKDTeUgAh7cLCKpS4wuO7uPIUqxcXdzIysNBJmrKeHzfpk+liX3AA==
+"@motif-foundation/listing@^1.0.23":
+  version "1.0.23"
+  resolved "https://registry.yarnpkg.com/@motif-foundation/listing/-/listing-1.0.23.tgz#940306e153a16a99d9382f94977e65f5a4735c22"
+  integrity sha512-cEm/dEWjnO3vV16XyjOY0loLCJ8pZGwZa4MkLJr+l9Ou0vV9JkojNExpqUxZ0qup6RK56k3c3ZezG6Qud/ie7w==
   dependencies:
-    "@motif-foundation/asset" "^1.0.17"
+    "@motif-foundation/asset" "^1.0.20"
     "@openzeppelin/contracts" "^3.2.0"
     dotenv "^8.2.0"
     fs-extra "^9.1.0"
@@ -900,7 +900,7 @@
 
 "@motif-foundation/space-metadata@^1.0.4":
   version "1.0.4"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/space-metadata/-/space-metadata-1.0.4.tgz#bc2df702d95f7715638a3b248a8dcc93595329d3"
+  resolved "https://registry.npmjs.org/@motif-foundation/space-metadata/-/space-metadata-1.0.4.tgz"
   integrity sha512-X2oy0tTjNe5gPvOVjMgEXrDMyhiIKQbNH4n0UgTpSAUnP1kgouKhq1UcOON+nIhy4hDRjFCOi7hdmip/4y4F2g==
   dependencies:
     "@types/jsonschema" "^1.1.1"
