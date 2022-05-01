@@ -85,7 +85,7 @@
     "additionalProperties": false,
     "required": [
         "assetType",
-        "itemType",
+        "itemCategory",
         "itemOwned",
         "blockchain",
         "name",
