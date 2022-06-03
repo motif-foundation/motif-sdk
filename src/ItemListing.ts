@@ -109,6 +109,30 @@ export class ItemListing {
     )
   }
 
+  public async createMultipleListings(
+    tokenIds: Array<BigNumberish>,
+    startsAt: BigNumberish,
+    duration: BigNumberish,
+    listPrices: Array<BigNumberish>,
+    listType: number,
+    intermediary: string,
+    intermediaryFeePercentages: number,
+    listCurrency: string,
+    tokenAddress: string = this.itemAddress
+  ) {
+    return this.itemListing.createMultipleListings(
+      tokenIds,
+      tokenAddress,
+      startsAt,
+      duration,
+      listPrices,
+      listType,
+      intermediary,
+      intermediaryFeePercentages,
+      listCurrency
+    )
+  }
+
   public async setListingApproval(listingId: BigNumberish, approved: boolean) {
     return this.itemListing.setListingApproval(listingId, approved)
   }
@@ -141,21 +165,6 @@ export class ItemListing {
       return this.itemListing.endFixedPriceListing(listingId, amount, { value: amount })
     } else {
       return this.itemListing.endFixedPriceListing(listingId, amount)
-    }
-  }
-
-  public async endFixedPriceListings(
-    listingIds: Array<BigNumberish>,
-    amounts: Array<BigNumberish>
-  ) {
-    const { listCurrency } = await this.itemListing.listings(listingIds[0])
-    let totalAmount = sumOfArrVal(amounts)
-    if (listCurrency === ethers.constants.AddressZero) {
-      return this.itemListing.endFixedPriceListings(listingIds, amounts, {
-        value: totalAmount,
-      })
-    } else {
-      return this.itemListing.endFixedPriceListings(listingIds, amounts)
     }
   }
 

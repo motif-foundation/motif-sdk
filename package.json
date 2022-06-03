@@ -1,6 +1,6 @@
 {
   "name": "@motif-foundation/sdk", 
-  "version": "1.0.62",
+  "version": "1.0.67",
   "main": "dist/src/index.js",
   "typings": "dist/src/index.d.ts",
   "files": [
@@ -22,9 +22,9 @@
     "node": ">=10"
   },
   "dependencies": {
-    "@motif-foundation/listing": "^1.0.28",
-    "@motif-foundation/asset": "^1.0.22",
-    "@motif-foundation/item-metadata": "^1.0.4",
+    "@motif-foundation/listing": "^1.0.31",
+    "@motif-foundation/asset": "^1.0.23",
+    "@motif-foundation/item-metadata": "^1.0.8",
     "@motif-foundation/space-metadata": "^1.0.7",
     "@motif-foundation/land-metadata": "^1.0.2",
     "@motif-foundation/avatar-metadata": "^1.0.13",

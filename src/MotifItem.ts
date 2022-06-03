@@ -237,6 +237,32 @@ export class MotifItem {
     return this.item.mint(itemData, bidShares, { gasLimit: paddedEstimate.toString() })
   }
 
+  public async mintMultiple(
+    itemData: Array<ItemData>,
+    bidShares: Array<BidShares>
+  ): Promise<ContractTransaction> {
+    try {
+      this.ensureNotReadOnly()
+      itemData.map((item, index) => {
+        validateURI(item.metadataURI)
+        validateURI(item.tokenURI)
+        validateBidShares(
+          bidShares[index].creator,
+          bidShares[index].owner,
+          bidShares[index].prevOwner
+        )
+      })
+    } catch (err) {
+      return Promise.reject(err.message)
+    }
+
+    const gasEstimate = await this.item.estimateGas.mintMultiple(itemData, bidShares)
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.mintMultiple(itemData, bidShares, {
+      gasLimit: paddedEstimate.toString(),
+    })
+  }
+
   /**
    * Mints a new piece of item on an instance of the Motif Item Contract
    * @param creator
