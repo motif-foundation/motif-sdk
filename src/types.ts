@@ -57,7 +57,6 @@ export type SpaceData = {
   metadataURI: string
   contentHash: BytesLike
   metadataHash: BytesLike
-  isPublic: boolean
   lands: Array<BigNumberish>
   pin: string
 }

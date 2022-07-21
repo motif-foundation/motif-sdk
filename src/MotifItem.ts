@@ -192,7 +192,11 @@ export class MotifItem {
       return Promise.reject(err.message)
     }
 
-    return this.item.updateTokenURI(itemId, tokenURI)
+    const gasEstimate = await this.item.estimateGas.updateTokenURI(itemId, tokenURI)
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.updateTokenURI(itemId, tokenURI, {
+      gasLimit: paddedEstimate.toString(),
+    })
   }
 
   /**
@@ -211,7 +215,14 @@ export class MotifItem {
       return Promise.reject(err.message)
     }
 
-    return this.item.updateTokenMetadataURI(itemId, metadataURI)
+    const gasEstimate = await this.item.estimateGas.updateTokenMetadataURI(
+      itemId,
+      metadataURI
+    )
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.updateTokenMetadataURI(itemId, metadataURI, {
+      gasLimit: paddedEstimate.toString(),
+    })
   }
 
   /**
@@ -300,7 +311,9 @@ export class MotifItem {
       return Promise.reject(err.message)
     }
 
-    return this.item.setAsk(itemId, ask)
+    const gasEstimate = await this.item.estimateGas.setAsk(itemId, ask)
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.setAsk(itemId, ask, { gasLimit: paddedEstimate.toString() })
   }
 
   /**
@@ -315,7 +328,9 @@ export class MotifItem {
       return Promise.reject(err.message)
     }
 
-    return this.item.setBid(itemId, bid)
+    const gasEstimate = await this.item.estimateGas.setBid(itemId, bid)
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.setBid(itemId, bid, { gasLimit: paddedEstimate.toString() })
   }
 
   /**
@@ -329,7 +344,9 @@ export class MotifItem {
       return Promise.reject(err.message)
     }
 
-    return this.item.removeAsk(itemId)
+    const gasEstimate = await this.item.estimateGas.removeAsk(itemId)
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.removeAsk(itemId, { gasLimit: paddedEstimate.toString() })
   }
 
   /**
@@ -343,7 +360,9 @@ export class MotifItem {
       return Promise.reject(err.message)
     }
 
-    return this.item.removeBid(itemId)
+    const gasEstimate = await this.item.estimateGas.removeBid(itemId)
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.removeBid(itemId, { gasLimit: paddedEstimate.toString() })
   }
 
   /**
@@ -358,7 +377,9 @@ export class MotifItem {
       return Promise.reject(err.message)
     }
 
-    return this.item.acceptBid(itemId, bid)
+    const gasEstimate = await this.item.estimateGas.acceptBid(itemId, bid)
+    const paddedEstimate = gasEstimate.mul(110).div(100)
+    return this.item.acceptBid(itemId, bid, { gasLimit: paddedEstimate.toString() })
   }
 
   /**

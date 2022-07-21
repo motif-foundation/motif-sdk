@@ -845,10 +845,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@motif-foundation/asset@^1.0.23":
-  version "1.0.23"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/asset/-/asset-1.0.23.tgz#1aecea182c52c40b53d4a14d51629daa8a939153"
-  integrity sha512-dg14MbqywxC0IZ4PV5PrPx/gPKhHiEmkdY8vJFPXXf9nqmjwUB17EvdyZ68XTXNwvVH5DfLIpXmOXnRNB4vzrQ==
+"@motif-foundation/asset@^1.0.28":
+  version "1.0.28"
+  resolved "https://registry.yarnpkg.com/@motif-foundation/asset/-/asset-1.0.28.tgz#ba7fafdc98dd13d27e50550724318d3479670e3f"
+  integrity sha512-GyoV2XT/7F0xqc4XAMVyUaBiQBfw3CKskA94DlYN7SsvOfYABEaDIeEyVXVDNNBLtKtTfWRGQTMplzVfFFYYbw==
   dependencies:
     ethers "^5.0.19"
     truffle-flattener "^1.5.0"
@@ -864,10 +864,10 @@
     tslib "^2.0.3"
     typescript "^4.1.3"
 
-"@motif-foundation/item-metadata@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/item-metadata/-/item-metadata-1.0.8.tgz#2c71d951eeee668c3441203836c15a6c325cdabb"
-  integrity sha512-2tQjQcDge4AOC4Pn2pN2bz8uAG9Uy6hVFy/OL+JGz5lmd6j/Kt5qxU6ZtPVvFntBUjeP0f9PX3967R1ei5mwbA==
+"@motif-foundation/item-metadata@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.yarnpkg.com/@motif-foundation/item-metadata/-/item-metadata-1.0.9.tgz#e604c46d44f14431b100edc41d18a5375df0c224"
+  integrity sha512-0Zl8yGzBdGf7UCD0JXYT8KpBlL1ktr6TfMJfIZwRErfwE3VA/FjDsKpAhb8etBXad87gwvEJ8qgc3CfgTtl40A==
   dependencies:
     "@types/jsonschema" "^1.1.1"
     json2ts "^0.0.7"
@@ -887,12 +887,12 @@
     tslib "^2.0.3"
     typescript "^4.1.3"
 
-"@motif-foundation/listing@^1.0.31":
-  version "1.0.31"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/listing/-/listing-1.0.31.tgz#0faf0e511f1a80f67fa5b515ab46fac8a5098313"
-  integrity sha512-EtPYxfjPu9rhu+zz5vHW43rrJvgDAqjUXCIPljYqvVdOb0zQIXy6dT/CbjoOCwyNCBGmPzyiI08WRUYPhCYdog==
+"@motif-foundation/listing@^1.0.34":
+  version "1.0.34"
+  resolved "https://registry.yarnpkg.com/@motif-foundation/listing/-/listing-1.0.34.tgz#0b2100b917cdc2ae14de91a60fe79ba4b52e6826"
+  integrity sha512-7+XdlmXm2XNVQR2HXyjk3DCoigt7V98urZb13glxKo6VuJHwBlPtpDWphVCodqbHshW03Ru/MI18HoDI3yIoxQ==
   dependencies:
-    "@motif-foundation/asset" "^1.0.23"
+    "@motif-foundation/asset" "^1.0.28"
     "@openzeppelin/contracts" "^3.2.0"
     dotenv "^8.2.0"
     fs-extra "^9.1.0"

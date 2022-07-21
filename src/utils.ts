@@ -60,7 +60,6 @@ export function constructSpaceData(
   metadataURI: string,
   contentHash: BytesLike,
   metadataHash: BytesLike,
-  isPublic: boolean,
   lands: Array<BigNumberish>,
   pin: string
 ): SpaceData {
@@ -75,7 +74,6 @@ export function constructSpaceData(
     metadataURI: metadataURI,
     contentHash: contentHash,
     metadataHash: metadataHash,
-    isPublic: isPublic,
     lands: lands,
     pin: pin,
   }
