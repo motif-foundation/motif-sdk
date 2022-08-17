@@ -254,6 +254,12 @@ export function chainIdToNetworkName(chainId: number): string {
     case 1: {
       return 'mainnet'
     }
+    case 137: {
+      return 'polygon'
+    }
+    case 56: {
+      return 'binance'
+    }
   }
 
   invariant(false, `chainId ${chainId} not officially supported by the Motif`)

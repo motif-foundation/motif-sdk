@@ -8,6 +8,8 @@ import mainnetAddresses from '@motif-foundation/listing/dist/addresses/1.json'
 import ropstenAddresses from '@motif-foundation/listing/dist/addresses/3.json'
 import motifAddresses from '@motif-foundation/listing/dist/addresses/7018.json'
 import motifTestnetAddresses from '@motif-foundation/listing/dist/addresses/7019.json'
+import polygonAddresses from '@motif-foundation/listing/dist/addresses/137.json'
+import binanceAddresses from '@motif-foundation/listing/dist/addresses/56.json'
 import { addresses } from './addresses'
 import { chainIdToNetworkName, validateAndParseAddress } from './utils'
 
@@ -15,6 +17,8 @@ const landListingAddresses: { [key: string]: string } = {
   mainnet: mainnetAddresses.landListing,
   ropsten: ropstenAddresses.landListing,
   motif: motifAddresses.landListing,
+  polygon: polygonAddresses.landListing,
+  binance: binanceAddresses.landListing,
   motifTestnet: motifTestnetAddresses.landListing,
 }
 
