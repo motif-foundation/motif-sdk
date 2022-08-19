@@ -124,7 +124,18 @@ export class ItemListing {
     listCurrency: string,
     tokenAddress: string = this.itemAddress
   ) {
-    return this.itemListing.createMultipleListings(
+    // return this.itemListing.createMultipleListings(
+    //   tokenIds,
+    //   tokenAddress,
+    //   startsAt,
+    //   duration,
+    //   listPrices,
+    //   listType,
+    //   intermediary,
+    //   intermediaryFeePercentages,
+    //   listCurrency
+    // )
+    const gasEstimate = await this.itemListing.estimateGas.createMultipleListings(
       tokenIds,
       tokenAddress,
       startsAt,
@@ -134,6 +145,21 @@ export class ItemListing {
       intermediary,
       intermediaryFeePercentages,
       listCurrency
+    )
+    const paddedEstimate = gasEstimate.mul(105).div(100)
+    return this.itemListing.createMultipleListings(
+      tokenIds,
+      tokenAddress,
+      startsAt,
+      duration,
+      listPrices,
+      listType,
+      intermediary,
+      intermediaryFeePercentages,
+      listCurrency,
+      {
+        gasLimit: paddedEstimate.toString(),
+      }
     )
   }
 

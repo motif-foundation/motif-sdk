@@ -268,7 +268,7 @@ export class MotifItem {
     }
 
     const gasEstimate = await this.item.estimateGas.mintMultiple(itemData, bidShares)
-    const paddedEstimate = gasEstimate.mul(110).div(100)
+    const paddedEstimate = gasEstimate.mul(105).div(100)
     return this.item.mintMultiple(itemData, bidShares, {
       gasLimit: paddedEstimate.toString(),
     })
