@@ -845,10 +845,10 @@
     "@types/yargs" "^15.0.0"
     chalk "^4.0.0"
 
-"@motif-foundation/asset@^1.0.33":
-  version "1.0.33"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/asset/-/asset-1.0.33.tgz#78f76473f39531e58212770e00235ddf80a5139c"
-  integrity sha512-6RGzlQc83VLP73i2uP5G2BrOj/oC01ktS7nYjo0BqbUExanmJXwu67M3SXzlJ7oy0r9JvuK02wWy7ZHEtTIMOA==
+"@motif-foundation/asset@^1.0.37":
+  version "1.0.37"
+  resolved "https://registry.yarnpkg.com/@motif-foundation/asset/-/asset-1.0.37.tgz#86ca57b66da6ebc02e1cbeaaf46ab23a4fe116b6"
+  integrity sha512-Nz0IBcd1Kch4zuK2sg0NtyIVAdaI2nSNdpVrvDWdamolw1ZG6G3TMScKHvoCW/rn9mMtsfkMMz8aqFaApwXACA==
   dependencies:
     ethers "^5.0.19"
     truffle-flattener "^1.5.0"
@@ -887,12 +887,12 @@
     tslib "^2.0.3"
     typescript "^4.1.3"
 
-"@motif-foundation/listing@^1.0.39":
-  version "1.0.39"
-  resolved "https://registry.yarnpkg.com/@motif-foundation/listing/-/listing-1.0.39.tgz#aad97937728eda3829924a072ce844f075868fb2"
-  integrity sha512-S7G2r/CMl8MHdiyLPoSD2hnwj0/DoawMwPhUHJLvNrJhfFCzEPxhmKaFmxfvSe1X8bZH9hKnH1V1pWlrHB8X8g==
+"@motif-foundation/listing@^1.0.43":
+  version "1.0.43"
+  resolved "https://registry.yarnpkg.com/@motif-foundation/listing/-/listing-1.0.43.tgz#c2d6849c8fc36aff9c514e3c4107f08028cd2e95"
+  integrity sha512-i2CZtAAAKBh7hbYnvuU5OgqgPI2DT7YAesnmqsQF1A1c5tPYK+K/KKJjxubdt/n87zHn/qoVfxYQ3kltCeE5Ag==
   dependencies:
-    "@motif-foundation/asset" "^1.0.33"
+    "@motif-foundation/asset" "^1.0.37"
     "@openzeppelin/contracts" "^3.2.0"
     dotenv "^8.2.0"
     fs-extra "^9.1.0"
